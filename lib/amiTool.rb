@@ -6,22 +6,19 @@ require 'aws_config'
 module AmiTool
   HEADINGS = ['AMI NAME', 'AMI ID', 'STATE', 'SNAPSHOT ID']
 
-  def self.ec2_client(credentials)
-    ec2_client = Aws::EC2::Client.new(
-      region: "ap-northeast-1",
-      credentials: credentials
-    )
+  def self.ec2_client
+    ec2_client = Aws::EC2::Client.new
   end
 
-  def self.list(credentials)
-    ec2 = AmiTool::ec2_client(credentials)
+  def self.list
+    ec2 = AmiTool::ec2_client
     result = ec2.describe_images({filters: [{name: "is-public", values: ["false"]}]})
     table = AmiTool::result_display(result)
     puts table
   end
 
-  def self.create(credentials, instance_id, ami_name)
-    ec2 = AmiTool::ec2_client(credentials)
+  def self.create(instance_id, ami_name)
+    ec2 = AmiTool::ec2_client
     options_hash = {
       instance_id: "#{instance_id}",
       name: "#{ami_name}",
@@ -38,8 +35,8 @@ module AmiTool
     puts table
   end
 
-  def self.delete(credentials, ami_id)
-    ec2 = AmiTool::ec2_client(credentials)
+  def self.delete(ami_id)
+    ec2 = AmiTool::ec2_client
     result = ec2.describe_images({image_ids: ["#{ami_id}"]})
     table = AmiTool::result_display(result)
     puts table
