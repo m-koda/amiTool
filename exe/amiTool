@@ -24,8 +24,8 @@ ARGV.options do |opt|
     opt.on('',   '--instance INSTANCE_ID')    {|v| instance_id      = v       }
     opt.on('',   '--name AMI_NAME')           {|v| ami_name         = v       }
     opt.on('',   '--ami-id AMI_ID')           {|v| ami_id           = v       }
-    opt.on('-c', '--create')                  {|v| mode             = :create }
-    opt.on('-d', '--delete')                  {|v| mode             = :delete }
+    opt.on('-c', '--create', '# AMIの作成')    {|v| mode             = :create }
+    opt.on('-d', '--delete', '# AMIの削除')    {|v| mode             = :delete }
 
     opt.parse!
 
