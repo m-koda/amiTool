@@ -7,7 +7,7 @@
 /spec/reports/
 /tmp/
 /vendor/bundle/
-.evnrc
+.envrc
 
 # rspec failure tracking
 .rspec_status

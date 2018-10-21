@@ -1,35 +1,70 @@
 # AmiTool
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/amiTool`. To experiment with that code, run `bin/console` for an interactive prompt.
+## 概要
+AMIの一覧表示、作成、削除が行えるコマンドラインツール
 
-TODO: Delete this and the text above, and describe your gem
-
-## Installation
+## インストール
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'amiTool'
+gem 'amiTool', git: 'https://github.com/higeojisan/amiTool.git'
 ```
 
 And then execute:
 
     $ bundle
 
-Or install it yourself as:
+## ヘルプ
+```
+Usage: amiTool [options]
+    -p, --profile PROFILE_NAME
+        --credentials_path PATH
+    -k, --access-key ACCESS_KEY
+    -s, --secret-key SECRET_KEY
+    -r, --region REGION
+        --instance INSTANCE_ID
+        --name AMI_NAME
+        --ami-id AMI_ID
+    -c, --create
+    -d, --delete
+```
 
-    $ gem install amiTool
+## 使い方
 
-## Usage
+### AMIの一覧表示
+```
+$ bundle exec amiTool --profile private
++-------------------------------------------------------------------------------------------+-----------------------+-----------+------------------------+
+| AMI NAME                                                                                  | AMI ID                | STATE     | SNAPSHOT ID            |
++-------------------------------------------------------------------------------------------+-----------------------+-----------+------------------------+
+| base-ami_1534490939                                                                       | ami-06d4e833d8c928748 | available | snap-0c6459e3a9987b522 |
++-------------------------------------------------------------------------------------------+-----------------------+-----------+------------------------+
+| base-ami_1534479261                                                                       | ami-087f7656e71cdafb2 | available | snap-090ec9e11900fa940 |
++-------------------------------------------------------------------------------------------+-----------------------+-----------+------------------------+
+```
 
-TODO: Write usage instructions here
+### AMIの作成
+```
+$ bundle exec amiTool --create --instance i-00bd907d337768d24 --name amiTool-test-2018102202 --profile private
+AMIを作成しています...
+AMIの作成が完了しました
++-------------------------+-----------------------+-----------+------------------------+
+| AMI NAME                | AMI ID                | STATE     | SNAPSHOT ID            |
++-------------------------+-----------------------+-----------+------------------------+
+| amiTool-test-2018102202 | ami-0fcf9f8a7fcf82c6c | available | snap-0c2af89bb40309e31 |
++-------------------------+-----------------------+-----------+------------------------+
+```
 
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/amiTool.
+### AMIの削除
+```
+$ bundle exec amiTool --delete --ami-id ami-0f18cd90d129a1863 --profile private
++-------------------------+-----------------------+-----------+------------------------+
+| AMI NAME                | AMI ID                | STATE     | SNAPSHOT ID            |
++-------------------------+-----------------------+-----------+------------------------+
+| amiTool-test-2018102104 | ami-0f18cd90d129a1863 | available | snap-043de26ca7852ea95 |
++-------------------------+-----------------------+-----------+------------------------+
+上記の AMI を削除しますか?(y/n):y
+AMIを削除します...
+AMIを削除しました
+```
