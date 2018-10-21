@@ -1,0 +1,53 @@
+#!/usr/bin/env ruby
+$: << File.expand_path("#{File.dirname __FILE__}/../lib")
+require 'rubygems'
+require 'amiTool'
+require 'optparse'
+
+mode = :list
+
+ARGV.options do |opt|
+  begin
+    profile_name = nil
+    instance_id = nil
+    ami_name = nil
+    ami_id = nil
+
+    opt.on('-p', '--profile PROFILE_NAME') {|v| profile_name = v }
+    opt.on('', '--instance INSTANCE_ID') {|v| instance_id = v }
+    opt.on('', '--name AMI_NAME')        {|v| ami_name = v }
+    opt.on('', '--ami-id AMI_ID')          {|v| ami_id = v }
+    opt.on('-c', '--create')               {|v| mode = :create }
+    opt.on('-d', '--delete')               {|v| mode = :delete }
+
+    opt.parse!
+
+    profile_name ||= ENV['AWS_DEFAULT_PROFILE'] || ENV['AWS_PROFILE']
+
+    if profile_name
+      access_key = AWSConfig["#{profile_name}"]["aws_access_key_id"]
+      secret_key = AWSConfig["#{profile_name}"]["aws_secret_access_key"]
+    else
+      puts opt.help
+      exit 1
+    end
+
+    unless access_key && secret_key
+      puts opt.help
+      exit 1
+    end
+    credentials = Aws::Credentials.new(access_key, secret_key)
+
+    case mode
+    when :list
+      AmiTool::list(credentials)
+    when :create
+      AmiTool::create(credentials, "#{instance_id}", "#{ami_name}")
+    when :delete
+      AmiTool::delete(credentials, ami_id)
+    end
+  rescue => e
+    $stderr.puts("[ERROR] #{e.message}")
+    exit 1
+  end
+end
