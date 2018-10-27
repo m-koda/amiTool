@@ -45,7 +45,9 @@ module AmiTool
     if answer == 'y' || answer == 'Y'
       puts "AMIを削除します..."
       ec2.deregister_image({image_id: "#{ami_id}"})
-      ec2.delete_snapshot({snapshot_id: "#{result.images[0].block_device_mappings[0].ebs.snapshot_id}"})
+      AmiTool::generate_snapshot_ids(result).each do |snapshot|
+        ec2.delete_snapshot({snapshot_id: snapshot})
+      end
       puts "AMIを削除しました"
     end
   end
@@ -57,11 +59,19 @@ module AmiTool
       row << image.name
       row << image.image_id
       row << image.state
-      row << image.block_device_mappings[0].ebs.snapshot_id
+      row << AmiTool::generate_snapshot_ids(image).join("\n")
       rows << row
       rows << :separator if index != result.images.count - 1
     end
     table = Terminal::Table.new :headings => AmiTool::HEADINGS, :rows => rows
   end
 
+  def self.generate_snapshot_ids(image)
+    snapshot_ids_array = []
+    image[:block_device_mappings].each do |d|
+      snapshot_ids_array << d[:ebs][:snapshot_id] unless d[:ebs].nil?
+    end
+
+    snapshot_ids_array
+  end
 end
