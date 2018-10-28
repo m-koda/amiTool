@@ -1,5 +1,21 @@
-sudo: false
-language: ruby
-rvm:
-  - 2.3.6
-before_install: gem install bundler -v 1.16.2
+sudo: required
+matrix:
+  include:
+  - name: "Ruby 2.5"
+    env: TEST_TARGET=rspec-ruby25
+  - name: "Ruby 2.4"
+    env: TEST_TARGET=rspec-ruby24
+  - name: "Ruby 2.3"
+    env: TEST_TARGET=rspec-ruby23
+services:
+  - docker
+before_install:
+  - docker-compose build ${TEST_TARGET}
+  - docker-compose up -d
+install:
+  - docker-compose exec ${TEST_TARGET} bundle install
+before_script:
+script:
+  - docker-compose exec ${TEST_TARGET} rake spec
+after_script:
+notifications:

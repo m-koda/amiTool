@@ -10,6 +10,7 @@ ARGV.options do |opt|
     access_key = nil
     secret_key = nil
     region = 'ap-northeast-1'
+    endpoint = nil
     profile_name = nil
     credentials_path = nil
     instance_id = nil
@@ -21,11 +22,12 @@ ARGV.options do |opt|
     opt.on('-k', '--access-key ACCESS_KEY')   {|v| access_key       = v       }
     opt.on('-s', '--secret-key SECRET_KEY')   {|v| secret_key       = v       }
     opt.on('-r', '--region REGION')           {|v| region           = v       }
+    opt.on('',   '--endpoint URL', '# API Endpoint を指定')            {|v| endpoint         = v       }
     opt.on('',   '--instance INSTANCE_ID')    {|v| instance_id      = v       }
     opt.on('',   '--name AMI_NAME')           {|v| ami_name         = v       }
     opt.on('',   '--ami-id AMI_ID')           {|v| ami_id           = v       }
-    opt.on('-c', '--create', '# AMIの作成')    {|v| mode             = :create }
-    opt.on('-d', '--delete', '# AMIの削除')    {|v| mode             = :delete }
+    opt.on('-c', '--create', '# AMI の作成')    {|v| mode             = :create }
+    opt.on('-d', '--delete', '# AMI の削除')    {|v| mode             = :delete }
 
     opt.parse!
 
@@ -48,6 +50,7 @@ ARGV.options do |opt|
     end
 
     aws_opts[:region] = region
+    aws_opts[:endpoint] = endpoint if endpoint
     Aws.config.update(aws_opts)
 
     case mode

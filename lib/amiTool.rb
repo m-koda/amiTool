@@ -12,7 +12,10 @@ module AmiTool
 
   def self.list
     ec2 = AmiTool::ec2_client
-    result = ec2.describe_images({filters: [{name: "is-public", values: ["false"]}]})
+    result = ec2.describe_images({
+                                  filters: [{name: "is-public", values: ["false"]}]
+                                 }
+    )
     table = AmiTool::result_display(result)
     puts table
   end

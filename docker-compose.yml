@@ -1,0 +1,49 @@
+version: '3'
+services:
+  moto_server:
+    image: python:latest
+    build: ./spec/docker/moto_server
+    container_name: moto_server
+    command: ["moto_server", "ec2", "-H", "0.0.0.0", "-p", "5000"]
+    ports:
+      - "5000:5000"
+    networks:
+      amitool_test_net:
+        ipv4_address: 192.168.0.100
+  rspec-ruby25:
+    image: ruby:latest
+    build: ./spec/docker/rspec
+    container_name: rspec-ruby25
+    volumes:
+      - .:/work
+    command: tail -f /dev/null
+    networks:
+      amitool_test_net:
+        ipv4_address: 192.168.0.5
+  rspec-ruby24:
+    image: ruby:2.4
+    build: ./spec/docker/rspec
+    container_name: rspec-ruby24
+    volumes:
+      - .:/work
+    command: tail -f /dev/null
+    networks:
+      amitool_test_net:
+        ipv4_address: 192.168.0.4
+  rspec-ruby23:
+    image: ruby:2.3
+    build: ./spec/docker/rspec
+    container_name: rspec-ruby23
+    volumes:
+      - .:/work
+    command: tail -f /dev/null
+    networks:
+      amitool_test_net:
+        ipv4_address: 192.168.0.3
+networks:
+  amitool_test_net:
+    driver: bridge
+    ipam:
+     driver: default
+     config:
+       - subnet: 192.168.0.0/24
