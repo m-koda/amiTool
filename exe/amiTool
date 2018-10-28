@@ -55,7 +55,7 @@ ARGV.options do |opt|
 
     case mode
     when :list
-      AmiTool::list
+      AmiTool::list(ami_id)
     when :create
       raise 'The request must contain the parameter InstanceId' if instance_id.nil?
       raise 'The request must contain the parameter AmiName' if ami_name.nil?

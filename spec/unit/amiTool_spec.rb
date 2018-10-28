@@ -8,13 +8,13 @@ describe "AmiTool Unittest" do
 
   context "ec2_client" do
     it "return Aws::EC2::Client object when right credentials given" do
-      client = Aws::EC2::Client.new(stub_responses: true)
+      client = Aws::EC2::Client.new
       expect(client.class).to eq(Aws::EC2::Client)
     end
   end
 
   it "return multiple snapshot ids" do
-    client = Aws::EC2::Client.new(stub_responses: true)
+    client = Aws::EC2::Client.new
     client.stub_responses(:describe_images,
       {
         images: [
