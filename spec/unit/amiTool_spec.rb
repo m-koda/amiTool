@@ -1,6 +1,7 @@
 require 'spec_helper'
 
-RSpec.describe AmiTool do
+# RSpec.describe AmiTool do
+describe "AmiTool Unittest" do
   it "has a version number" do
     expect(AmiTool::VERSION).not_to be nil
   end

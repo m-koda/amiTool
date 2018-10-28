@@ -22,7 +22,7 @@ ARGV.options do |opt|
     opt.on('-k', '--access-key ACCESS_KEY')   {|v| access_key       = v       }
     opt.on('-s', '--secret-key SECRET_KEY')   {|v| secret_key       = v       }
     opt.on('-r', '--region REGION')           {|v| region           = v       }
-    opt.on('',   '--endpoint URL', '# API Endpoint を指定')            {|v| endpoint         = v       }
+    opt.on('',   '--endpoint URL', '# API Endpoint を指定') {|v| endpoint = v  }
     opt.on('',   '--instance INSTANCE_ID')    {|v| instance_id      = v       }
     opt.on('',   '--name AMI_NAME')           {|v| ami_name         = v       }
     opt.on('',   '--ami-id AMI_ID')           {|v| ami_id           = v       }
@@ -57,8 +57,11 @@ ARGV.options do |opt|
     when :list
       AmiTool::list
     when :create
-      AmiTool::create("#{instance_id}", "#{ami_name}")
+      raise 'The request must contain the parameter InstanceId' if instance_id.nil?
+      raise 'The request must contain the parameter AmiName' if ami_name.nil?
+      AmiTool::create(instance_id, ami_name)
     when :delete
+      raise 'The request must contain the parameter ImageId' if ami_id.nil?
       AmiTool::delete(ami_id)
     end
   rescue => e
