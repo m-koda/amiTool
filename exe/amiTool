@@ -53,16 +53,17 @@ ARGV.options do |opt|
     aws_opts[:endpoint] = endpoint if endpoint
     Aws.config.update(aws_opts)
 
+    ami_tool = AmiTool::Client.new
     case mode
     when :list
-      AmiTool::list(ami_id)
+      ami_tool.list(ami_id)
     when :create
       raise 'The request must contain the parameter InstanceId' if instance_id.nil?
       raise 'The request must contain the parameter AmiName' if ami_name.nil?
-      AmiTool::create(instance_id, ami_name)
+      ami_tool.create(instance_id, ami_name)
     when :delete
       raise 'The request must contain the parameter ImageId' if ami_id.nil?
-      AmiTool::delete(ami_id)
+      ami_tool.delete(ami_id)
     end
   rescue => e
     $stderr.puts("[ERROR] #{e.message}")
