@@ -61,7 +61,7 @@ describe "AmiTool Unittest" do
       }
     )
     image = client.describe_images[:images][0]
-    res = AmiTool::generate_snapshot_ids(image)
+    res = AmiTool::Client::generate_snapshot_ids(image)
     expect(res).to eq(["snap-1234567890abcdefg", "snap-1234567890opqrstu"])
   end
 end
