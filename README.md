@@ -23,6 +23,7 @@ Usage: amiTool [options]
     -k, --access-key ACCESS_KEY
     -s, --secret-key SECRET_KEY
     -r, --region REGION
+    -e, --endpoint URL # API Endpointを指定
         --instance INSTANCE_ID
         --name AMI_NAME
         --ami-id AMI_ID
