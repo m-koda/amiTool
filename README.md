@@ -1,5 +1,7 @@
 # AmiTool
 
+[![Build Status](https://travis-ci.org/higeojisan/amiTool.svg?branch=master)](https://travis-ci.org/higeojisan/amiTool)
+
 ## 概要
 AMIの一覧表示、作成、削除が行えるコマンドラインツール
 
