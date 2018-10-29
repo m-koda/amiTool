@@ -54,8 +54,6 @@ module AmiTool
       end
     end
 
-    private
-
     def result_display(result)
       rows = []
       result.images.each_with_index do |image, index|
