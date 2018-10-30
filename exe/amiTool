@@ -56,11 +56,13 @@ ARGV.options do |opt|
     ami_tool = AmiTool::Client.new
     case mode
     when :list
-      ami_tool.list(ami_id)
+      result = ami_tool.list(ami_id)
+      AmiTool::Client::result_display(result)
     when :create
       raise 'The request must contain the parameter InstanceId' if instance_id.nil?
       raise 'The request must contain the parameter AmiName' if ami_name.nil?
-      ami_tool.create(instance_id, ami_name)
+      result = ami_tool.create(instance_id, ami_name)
+      AmiTool::Client::result_display(result)
     when :delete
       raise 'The request must contain the parameter ImageId' if ami_id.nil?
       ami_tool.delete(ami_id)

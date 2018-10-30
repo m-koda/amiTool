@@ -17,8 +17,6 @@ module AmiTool
       }
       params.update(image_ids: [image_id],) unless image_id.nil?
       result = @ec2_client.describe_images(params)
-      table = result_display(result)
-      puts table
     end
 
     def create(instance_id, ami_name)
@@ -33,15 +31,11 @@ module AmiTool
       @ec2_client.wait_until(:image_available, {image_ids: ["#{image_id}"]})
       puts "AMIの作成が完了しました"
       result = @ec2_client.describe_images({image_ids: ["#{image_id}"]})
-
-      table = result_display(result)
-      puts table
     end
 
     def delete(ami_id)
       result = @ec2_client.describe_images({image_ids: ["#{ami_id}"]})
-      table = result_display(result)
-      puts table
+      AmiTool::Client::result_display(result)
       print "上記の AMI を削除しますか?(y/n):"
       answer = STDIN.gets.chomp
       if answer == 'y' || answer == 'Y'
@@ -54,7 +48,7 @@ module AmiTool
       end
     end
 
-    def result_display(result)
+    def self.result_display(result)
       rows = []
       result.images.each_with_index do |image, index|
         row = []
@@ -66,6 +60,7 @@ module AmiTool
         rows << :separator if index != result.images.count - 1
       end
       table = Terminal::Table.new :headings => AmiTool::Client::HEADINGS, :rows => rows
+      puts table
     end
 
     def self.generate_snapshot_ids(image)
