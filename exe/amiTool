@@ -15,7 +15,7 @@ ARGV.options do |opt|
     credentials_path = nil
     instance_id = nil
     ami_name = nil
-    ami_id = nil
+    ami_ids = nil
 
     opt.on('-p', '--profile PROFILE_NAME')                  {|v| profile_name     = v       }
     opt.on('',   '--credentials_path PATH')                 {|v| credentials_path = v       }
@@ -25,7 +25,7 @@ ARGV.options do |opt|
     opt.on('-e', '--endpoint URL', '# API Endpoint を指定')  {|v| endpoint         = v       }
     opt.on('',   '--instance INSTANCE_ID')                  {|v| instance_id      = v       }
     opt.on('',   '--name AMI_NAME')                         {|v| ami_name         = v       }
-    opt.on('',   '--ami-id AMI_ID')                         {|v| ami_id           = v       }
+    opt.on('',   '--ami-id AMI_IDS', Array)                 {|v| ami_ids          = v       }
     opt.on('-c', '--create', '# AMI の作成')                 {|v| mode             = :create }
     opt.on('-d', '--delete', '# AMI の削除')                 {|v| mode             = :delete }
 
@@ -56,7 +56,7 @@ ARGV.options do |opt|
     ami_tool = AmiTool::Client.new
     case mode
     when :list
-      result = ami_tool.list(ami_id)
+      result = ami_tool.list(ami_ids)
       AmiTool::Client::result_display(result)
     when :create
       raise 'The request must contain the parameter InstanceId' if instance_id.nil?
@@ -64,8 +64,11 @@ ARGV.options do |opt|
       result = ami_tool.create(instance_id, ami_name)
       AmiTool::Client::result_display(result)
     when :delete
-      raise 'The request must contain the parameter ImageId' if ami_id.nil?
-      ami_tool.delete(ami_id)
+      raise 'The request must contain the parameter ImageId' if ami_ids.nil?
+      if ami_ids.is_a?(Array)
+        raise 'The request must contain the parameter ImageId' if ami_ids.empty?
+      end
+      ami_tool.delete(ami_ids)
     end
   rescue => e
     $stderr.puts("[ERROR] #{e.message}")
