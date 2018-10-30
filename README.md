@@ -25,12 +25,13 @@ Usage: amiTool [options]
     -k, --access-key ACCESS_KEY
     -s, --secret-key SECRET_KEY
     -r, --region REGION
-    -e, --endpoint URL # API Endpointを指定
+    -e, --endpoint URL               # API Endpoint を指定
         --instance INSTANCE_ID
         --name AMI_NAME
-        --ami-id AMI_ID
-    -c, --create
-    -d, --delete
+        --ami-id AMI_IDS
+                                     # カンマ区切りで複数指定可能
+    -c, --create                     # AMI の作成
+    -d, --delete                     # AMI の削除
 ```
 
 ## 使い方

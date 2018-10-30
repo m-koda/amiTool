@@ -25,7 +25,7 @@ ARGV.options do |opt|
     opt.on('-e', '--endpoint URL', '# API Endpoint を指定')  {|v| endpoint         = v       }
     opt.on('',   '--instance INSTANCE_ID')                  {|v| instance_id      = v       }
     opt.on('',   '--name AMI_NAME')                         {|v| ami_name         = v       }
-    opt.on('',   '--ami-id AMI_IDS', Array)                 {|v| ami_ids          = v       }
+    opt.on('',   '--ami-id AMI_IDS', Array, '# カンマ区切りで複数指定可能')    {|v| ami_ids          = v       }
     opt.on('-c', '--create', '# AMI の作成')                 {|v| mode             = :create }
     opt.on('-d', '--delete', '# AMI の削除')                 {|v| mode             = :delete }
 
