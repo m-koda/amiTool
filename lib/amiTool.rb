@@ -15,7 +15,7 @@ module AmiTool
       params = {
         filters: [{name: "is-public", values: ["false"]}]
       }
-      params.update(image_ids: [image_id],) unless image_id.nil?
+      params.update(image_ids: [*image_id],) unless image_id.nil?
       result = @ec2_client.describe_images(params)
     end
 
@@ -33,16 +33,22 @@ module AmiTool
       result = @ec2_client.describe_images({image_ids: ["#{image_id}"]})
     end
 
-    def delete(ami_id)
-      result = @ec2_client.describe_images({image_ids: ["#{ami_id}"]})
+    def delete(ami_ids)
+      result = @ec2_client.describe_images({image_ids: [*ami_ids]})
       AmiTool::Client::result_display(result)
       print "上記の AMI を削除しますか?(y/n):"
       answer = STDIN.gets.chomp
       if answer == 'y' || answer == 'Y'
         puts "AMIを削除します..."
-        @ec2_client.deregister_image({image_id: "#{ami_id}"})
-        AmiTool::Client::generate_snapshot_ids(result[:images][0]).each do |snapshot|
-          @ec2_client.delete_snapshot({snapshot_id: snapshot})
+        ami_ids.each do |ami_id|
+          @ec2_client.deregister_image({image_id: "#{ami_id}"})
+          result.images.each do |image|
+            if image.image_id == ami_id
+              AmiTool::Client::generate_snapshot_ids(image).each do |snapshot|
+                @ec2_client.delete_snapshot({snapshot_id: snapshot})
+              end
+            end
+          end
         end
         puts "AMIを削除しました"
       end
