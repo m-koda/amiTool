@@ -64,7 +64,10 @@ ARGV.options do |opt|
       result = ami_tool.create(instance_id, ami_name)
       AmiTool::Client::result_display(result)
     when :delete
-      raise 'The request must contain the parameter ImageId' if ami_ids.empty? or ami_ids.nil?
+      raise 'The request must contain the parameter ImageId' if ami_ids.nil?
+      if ami_ids.is_a?(Array)
+        raise 'The request must contain the parameter ImageId' if ami_ids.empty?
+      end
       ami_tool.delete(ami_ids)
     end
   rescue => e
